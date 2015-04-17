@@ -1,19 +1,52 @@
 /* global Firebase: true */
 'use strict';
 
-var root, users, me;
+var root, characters;
 
 $(document).ready(init);
 
 function init(){
   root = new Firebase('https://mj-firebasegame.firebaseio.com/');
-  users = root.child('users');
+  characters = root.child('characters');
   $('#create-user').click(createUser);
   $('#login-user').click(loginUser);
-  users.on('child_added', userAdded);
+  $('#logout-user').click(logoutUser);
+  characters.on('child_added', characterAdded);
+  $('#create-character').click(createCharacter);
 }
 
-function userAdded(snapshot){
+function characterAdded(snapshot){
+  var character = snapshot.val();
+  var myUid = root.getAuth() ? root.getAuth().uid : '';
+  var active = '';
+
+  if(myUid === character.uid){
+    active = 'active';
+  }
+
+
+  var tr = '<tr class="'+active+'"><td>'+character.handle+'</td><td><img class="avatarPic" src="'+character.avatar+'"></img></td></tr>';
+  $('#characters > tbody').append(tr);
+}
+
+function createCharacter(){
+    var handle = $('#handle').val();
+    var avatar = $('#avatar').val();
+    var uid = root.getAuth().uid;
+
+    characters.push({
+      handle: handle,
+      avatar: avatar,
+      uid: uid
+    });
+
+
+}
+
+function logoutUser(){
+  root.unauth(); // This logs you out
+  $('#characters > tbody > tr.active').removeClass('active');
+
 }
 
 function loginUser(){

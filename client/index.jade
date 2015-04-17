@@ -2,28 +2,43 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    title Apollo
+    title Legend of Mikeru
     link(rel='stylesheet', href='/vendor/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/simplex/bootstrap.min.css')
     link(rel='stylesheet', href=isProd ? '/index.min.css' : '/index.css')
     link(rel='shortcut icon', href='/favicon.ico')
   body
-    h1 Legend of Zelda
-    #user-creation
-      input#email(type='email', placeholder='email')
-      input#password(type='password', placeholder='password')
-      button#create-user Create User
-      button#login-user Login User
+    .container
+      h1 Legend of Mikeru
+      .jumbotron
+        h3 Login
+        #user-creation
+          input#email(type='email', placeholder='email')
+          input#password(type='password', placeholder='password')
+          button#create-user Create User
+          button#login-user Login User
+        hr
+        h3 Create Avatar
+        #character-creation
+          input#handle(type='text', placeholder='Handle')
+          input#avatar(type='url', placeholder='Avatar URL')
+          button#create-character Create Character
+        hr
+        h3 Logout
+        button#logout-user Logout User
 
 
-    table#users
-      thead
-        tr
-          th Handle
-          th Avatar
-      tbody
-
+      table#characters
+        thead
+          tr
+            th Handle
+            th Avatar
+        tbody
+    
+    
     script(src='/vendor/firebase/firebase.js')
     script(src='/vendor/jquery/dist/jquery.min.js')
+    script(src='/vendor/bootstrap/dist/js/bootstrap.min.js')
     script(src='/vendor/lodash/lodash.min.js')
     script(src='/vendor/moment/min/moment.min.js')
     script(src=isProd ? '/index.min.js' : '/index.js')
