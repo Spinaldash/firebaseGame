@@ -1,7 +1,7 @@
 /* global Firebase: true */
 'use strict';
 
-var root, characters;
+var root, characters, myKey;
 
 $(document).ready(init);
 
@@ -12,7 +12,9 @@ function init(){
   $('#login-user').click(loginUser);
   $('#logout-user').click(logoutUser);
   characters.on('child_added', characterAdded);
+  characters.on('child_changed', characterChanged);
   $('#create-character').click(createCharacter);
+  $('#start-user').click(startUser);
 }
 
 function characterAdded(snapshot){
@@ -21,12 +23,25 @@ function characterAdded(snapshot){
   var active = '';
 
   if(myUid === character.uid){
+    myKey = snapshot.key();
     active = 'active';
   }
 
-
   var tr = '<tr class="'+active+'"><td>'+character.handle+'</td><td><img class="avatarPic" src="'+character.avatar+'"></img></td></tr>';
   $('#characters > tbody').append(tr);
+}
+
+function characterChanged(snapshot){
+  var character = snapshot.val();
+  var x = character.x;
+  var y = character.y;
+  // Find the old picture and remove it
+  $('#board').find('img[src="'+character.avatar+'"]').parent().empty();
+  //place it in a random spot
+  $('#board > tbody > tr > td[data-x='+x+'][data-y='+y+']').empty();
+  $('#board > tbody > tr > td[data-x='+x+'][data-y='+y+']').append('<img class="avatarPic" src='+character.avatar+'></img>');
+  console.log(character);
+
 }
 
 function createCharacter(){
@@ -45,6 +60,7 @@ function createCharacter(){
 
 function logoutUser(){
   root.unauth(); // This logs you out
+  myKey = null;
   $('#characters > tbody > tr.active').removeClass('active');
 
 }
@@ -62,8 +78,15 @@ function loginUser(){
     } else {
       console.log("Authenticated successfully with payload:", authData);
       redrawCharacters();
+      sendPosition();
     }
   });
+}
+
+function startUser(){
+  var x = Math.floor(Math.random() * 10);
+  var y = Math.floor(Math.random() * 10);
+  characters.child(myKey).update({x:x, y:y});
 }
 
 function redrawCharacters(){

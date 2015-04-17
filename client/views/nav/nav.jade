@@ -1,0 +1,21 @@
+nav.navbar.navbar-default
+  .container-fluid
+    .navbar-header
+      button.navbar-toggle.collapsed(data-toggle="collapse", data-target="#navbar")
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.hvr-underline-from-center.navbar-brand(href='/') Legend of Mikeru
+    #navbar.collapse.navbar-collapse
+      ul.nav.navbar-nav.navbar-right
+        //- li: a(href='/views/pages/portfolio.html'): i.fa.fa-street-view &nbsp; Portfolio
+        li: button#logout-user.btn.btn-danger Logout User
+
+      ul.nav.navbar-nav.navbar-left
+      ul#user-creation.nav.navbar-nav.navbar-left
+        li: input#email(type='email', placeholder='email')
+        li: input#password(type='password', placeholder='password')
+        li: button.btn.btn-info#login-user Login User
+        li: button.btn.btn-info#create-user Create User
+        
