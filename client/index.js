@@ -61,8 +61,15 @@ function loginUser(){
       console.log("Login failed!", error);
     } else {
       console.log("Authenticated successfully with payload:", authData);
+      redrawCharacters();
     }
   });
+}
+
+function redrawCharacters(){
+  $('#characters > tbody').empty();
+  characters.off('child_added');
+  characters.on('child_added', characterAdded);
 }
 
 
