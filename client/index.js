@@ -1,7 +1,7 @@
 /* global Firebase: true */
 'use strict';
 
-var root, characters, myKey;
+var root, characters, myKey, myCharacter;
 
 $(document).ready(init);
 
@@ -15,6 +15,29 @@ function init(){
   characters.on('child_changed', characterChanged);
   $('#create-character').click(createCharacter);
   $('#start-user').click(startUser);
+  $(document).keydown(keyDown);
+}
+
+function keyDown(event){
+  // $('#board').find('img[src="'+myCharacter.avatar+'"]');
+  var x = $('#board').find('img[src="'+myCharacter.avatar+'"]').parent().data('x')
+  var y = $('#board').find('img[src="'+myCharacter.avatar+'"]').parent().data('y')
+  switch(event.keyCode){
+    case 37:
+      x -= 1;
+      break;
+    case 38:
+      y -= 1;
+      break;
+    case 39:
+      x += 1;
+      break;
+    case 40:
+      y += 1;
+      break;
+  }
+  characters.child(myKey).update({x:x, y:y});
+  event.preventDefault();
 }
 
 function characterAdded(snapshot){
@@ -24,6 +47,7 @@ function characterAdded(snapshot){
 
   if(myUid === character.uid){
     myKey = snapshot.key();
+    myCharacter = character;
     active = 'active';
   }
 
@@ -78,7 +102,6 @@ function loginUser(){
     } else {
       console.log("Authenticated successfully with payload:", authData);
       redrawCharacters();
-      sendPosition();
     }
   });
 }
